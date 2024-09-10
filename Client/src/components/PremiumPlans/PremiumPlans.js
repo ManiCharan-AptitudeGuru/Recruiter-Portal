@@ -116,29 +116,32 @@ const PlanCard = React.memo(
 );
 
 const PremiumPlans = () => {
-  const { currentPlan, availablePlans, updateUserPlan, fetchUserPlans } =
-    useGlobalState();
-    
-  
+  const { currentPlan, availablePlans, updateUserPlan, fetchUserPlans } = useGlobalState();
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     fetchUserPlans();
   }, [fetchUserPlans]);
 
   const handleBuyPlan = async (planId) => {
+    setLoading(true);
     try {
       const result = await updateUserPlan(planId);
       if (result.success) {
         console.log("Plan updated successfully");
+        // Refresh the plans after updating
+        await fetchUserPlans();
       } else {
         console.error("Failed to update the plan:", result.error);
       }
     } catch (error) {
       console.error("Failed to update the plan:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const getColorForPlan = React.useCallback((name) => {
-    // Handle case where name might be undefined
+  const getColorForPlan = useCallback((name) => {
     if (!name) return "#9ca3af"; // default color
 
     switch (name.toUpperCase()) {
@@ -153,7 +156,7 @@ const PremiumPlans = () => {
     }
   }, []);
 
-  if (!currentPlan || availablePlans.length === 0) {
+  if (loading || !currentPlan || availablePlans.length === 0) {
     return (
       <PlansContainer>
         <ThreeDots color="#00BFFF" height={80} width={80} />
@@ -164,7 +167,6 @@ const PremiumPlans = () => {
   return (
     <PlansContainer>
       <PlansGrid>
-      {console.log(currentPlan.name)}
         {currentPlan && (
           <PlanCard
             key={currentPlan._id}

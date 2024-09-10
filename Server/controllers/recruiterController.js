@@ -126,36 +126,6 @@ exports.verifyOTP = async (req, res) => {
   }
 };
 
-// exports.uploadVerificationDocuments = async (req, res) => {
-//   try {
-//     if (!req.files || req.files.length === 0) {
-//       return res.status(400).json({ message: "No files were uploaded." });
-//     }
-
-//     const recruiter = await Recruiter.findById(req.recruiterId);
-//     if (!recruiter) {
-//       return res.status(404).json({ message: "Recruiter not found." });
-//     }
-
-//     const documents = req.files.map((file) => ({
-//       name: file.originalname,
-//       data: file.buffer.toString("base64"),
-//       contentType: file.mimetype,
-//     }));
-
-//     recruiter.verificationDocuments.push(...documents);
-//     await recruiter.save();
-
-//     res
-//       .status(200)
-//       .json({ message: "Documents uploaded and saved successfully" });
-//   } catch (error) {
-//     res
-//       .status(500)
-//       .json({ message: "Error uploading documents", error: error.message });
-//   }
-// };
-
 exports.rejectRecruiter = async (req, res) => {
   try {
     const { recruiterId } = req.params;
@@ -365,3 +335,29 @@ exports.getUnverifiedDocuments = async (req, res) => {
     });
   }
 };
+
+exports.updatePreferences=async(req,res)=>{
+  try {
+    const { id } = req.params;
+    const notificationPreferences = req.body;
+
+    const updatedRecruiter = await Recruiter.findByIdAndUpdate(
+      id,
+      { notificationPreferences },
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedRecruiter) {
+      return res.status(404).json({ success: false, error: 'Recruiter not found' });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: 'Notification preferences updated successfully',
+      notificationPreferences: updatedRecruiter.notificationPreferences
+    });
+  } catch (error) {
+    console.error('Error updating notification preferences:', error);
+    res.status(500).json({ success: false, error: 'An error occurred while updating notification preferences' });
+  }
+}

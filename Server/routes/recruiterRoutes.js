@@ -8,12 +8,6 @@ router.post("/register", recruiterController.register);
 router.get("/verify/:token", recruiterController.verifyEmail);
 router.post("/login", recruiterController.login);
 router.post("/verify-otp", recruiterController.verifyOTP);
-// router.post(
-//   "/upload-documents",
-//   auth,
-//   upload.array("documents", 5),
-//   recruiterController.uploadVerificationDocuments
-// );
 router.get(
   "/admin/unverified-recruiters",
   recruiterController.getUnverifiedRecruiters
@@ -33,5 +27,9 @@ router.get(
   recruiterController.getNewRecruiterCount
 );
 router.get("/profile", recruiterController.getProfile);
+router.put(
+  "/:id/notification-preferences",
+  recruiterController.updatePreferences
+);
 
 module.exports = router;

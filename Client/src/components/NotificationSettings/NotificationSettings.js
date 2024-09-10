@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useForm, Controller } from 'react-hook-form';
+import { updateNotificationPreferences } from '../../services/api';
 
 const Container = styled.div`
   max-width: 800px;
@@ -148,9 +149,17 @@ function NotificationSettings() {
   });
 
   const onSubmit = async (data) => {
-    
-      alert('Preferences updated');
-    
+    try {
+      const response = await updateNotificationPreferences(data);
+      if (response.success) {
+        alert('Preferences updated successfully');
+      } else {
+        alert('Failed to update preferences: ' + response.error);
+      }
+    } catch (error) {
+      console.error('Error updating preferences:', error);
+      alert('An error occurred while updating preferences');
+    }
   };
 
   return (

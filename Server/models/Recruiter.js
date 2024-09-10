@@ -8,6 +8,17 @@ const DocumentSchema = new mongoose.Schema({
   contentType: { type: String, required: true },
 });
 
+const NotificationPreferencesSchema = new mongoose.Schema({
+  newCandidateApplications: { type: [String], default: ['email'] },
+  subscriptionRenewals: { type: [String], default: ['email'] },
+  profileChanges: { type: [String], default: ['email'] },
+  verificationStatuses: { type: [String], default: ['email'] },
+  jobApplicationUpdates: { type: [String], default: ['email'] },
+  paymentConfirmations: { type: [String], default: ['email'] },
+  loginAlerts: { type: [String], default: ['email'] },
+  unusualActivity: { type: [String], default: ['email'] },
+});
+
 const RecruiterSchema = new mongoose.Schema({
   fullName: { type: String, required: true },
   companyName: { type: String, required: true },
@@ -27,6 +38,10 @@ const RecruiterSchema = new mongoose.Schema({
   isApproved: { type: Boolean, default: false },
   agreedToTerms: { type: Boolean, required: true },
   lastLogin: Date,
+  notificationPreferences: {
+    type: NotificationPreferencesSchema,
+    default: () => ({}),
+  },
 });
 
 RecruiterSchema.pre("save", async function (next) {

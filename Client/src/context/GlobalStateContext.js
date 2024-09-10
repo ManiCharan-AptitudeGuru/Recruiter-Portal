@@ -40,14 +40,18 @@ export const GlobalStateProvider = ({ children }) => {
 
   const updateUserPlan = useCallback(async (planId) => {
     try {
-      const { user, remainingPlans } = await updatePlan(planId);
-      setPlan(user.plan);
-      setCurrentPlan(user.plan);
-      setAvailablePlans(remainingPlans);
-      return { success: true };
+      const result = await updatePlan(planId);
+      if (result.success) {
+        setCurrentPlan(result.currentPlan);
+        setAvailablePlans(result.availablePlans);
+        setPlan(result.currentPlan.name);
+        return { success: true };
+      } else {
+        throw new Error(result.error);
+      }
     } catch (error) {
       console.error("Error updating user plan:", error);
-      return { success: false, error };
+      return { success: false, error: error.message };
     }
   }, []);
 

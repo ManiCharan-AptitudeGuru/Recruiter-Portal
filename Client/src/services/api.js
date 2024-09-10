@@ -184,11 +184,11 @@ export const getPremiumPlans = async () => {
 export const updatePlan = async (planId) => {
   try {
     const response = await api.post("/premium-plans", { planId, userId });
-    if (response.data.user && response.data.remainingPlans) {
+    if (response.data.currentPlan && response.data.availablePlans) {
       return {
         success: true,
-        user: response.data.user,
-        plans: [...response.data.remainingPlans, response.data.currentPlan],
+        currentPlan: response.data.currentPlan,
+        availablePlans: response.data.availablePlans,
       };
     } else {
       return { success: false, error: "Unexpected server response" };
@@ -196,6 +196,20 @@ export const updatePlan = async (planId) => {
   } catch (error) {
     console.error("Error updating plan:", error);
     return { success: false, error: error.message };
+  }
+};
+
+export const updateNotificationPreferences = async (preferences) => {
+  try {
+    const response = await api.put(
+      `/recruiters/${userId}/notification-preferences`,
+      preferences
+    );
+    return response.data;
+  } catch (error) {
+    return handleApiError({
+      error: "Failed to update notification preferences",
+    });
   }
 };
 
