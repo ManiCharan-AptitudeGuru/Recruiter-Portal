@@ -28,7 +28,7 @@ exports.downloadInvoice = async (req, res) => {
   }
 };
 
-exports.generateInvoice = async (re, res) => {
+exports.generateInvoice = async (req, res) => {
   try {
     const { userId, planDetails, amount } = req.body;
     const invoice = await invoiceService.generateInvoice(

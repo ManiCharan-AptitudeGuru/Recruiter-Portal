@@ -14,6 +14,8 @@ import NotificationSettingsPage from './pages/NotificationSettingsPage/Notificat
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 import HomePage from './pages/HomePage/HomePage';
 import PremiumPlans from './components/PremiumPlans/PremiumPlans';
+import Invoice from './pages/Invoice/Invoice';
+import GstManagement from './pages/GstManagement/GstManagement';
 import { GlobalStateProvider } from './context/GlobalStateContext';
 import AdminDashboardPage from './pages/AdminDashboard/AdminDashboardPage';
 
@@ -45,7 +47,9 @@ function AppContent() {
           <Route path="/candidates" element={<Candidates />} />
           <Route path="/settings" element={<NotificationSettingsPage />} />
           <Route path="/job-applications/:postingId" element={<ApplicationManagement />} />
-          <Route path="/subscription" element={<PremiumPlans/>}/>
+          <Route path="/subscription" element={<PremiumPlans />}/>
+          <Route path="/invoices" element={<Invoice />}/>
+          <Route path="/gst-remainder" element={<GstManagement />}/>
           </Route>
           <Route path="/welcome" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />

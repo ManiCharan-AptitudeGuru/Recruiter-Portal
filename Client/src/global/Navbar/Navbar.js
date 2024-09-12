@@ -1,6 +1,8 @@
 import React, {useState} from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { Dashboard, Work, People, Assignment, Settings, Logout } from '@styled-icons/material';
+import { FaFileInvoiceDollar } from "react-icons/fa";
+import { TbCirclePercentage } from "react-icons/tb"
 import styled, { css } from 'styled-components';
 import Cookies from 'js-cookie';
 
@@ -236,8 +238,14 @@ function Navbar() {
           </NavItem>
           <NavItem>
             <NavLink to="/invoices" active={isActive('/invoices')}>
-              <IconWrapper><StyledIcon as={Assignment} /></IconWrapper>
+              <IconWrapper><StyledIcon as={FaFileInvoiceDollar} /></IconWrapper>
               <LinkText>Invoices</LinkText>
+            </NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink to="/gst-remainder" active={isActive('/gst-remainder')}>
+              <IconWrapper><StyledIcon as={TbCirclePercentage} /></IconWrapper>
+              <LinkText>GST Remainder</LinkText>
             </NavLink>
           </NavItem>
         </NavList>

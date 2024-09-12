@@ -213,4 +213,53 @@ export const updateNotificationPreferences = async (preferences) => {
   }
 };
 
+export const downloadInvoice = async (invoiceId) => {
+  const response = await axios.get(`${API_URL}/invoices/${invoiceId}/download`, {
+    responseType: 'blob'
+  });
+  const url = window.URL.createObjectURL(new Blob([response.data]));
+  const link = document.createElement('a');
+  link.href = url;
+  link.setAttribute('download', `invoice-${invoiceId}.pdf`);
+  document.body.appendChild(link);
+  link.click();
+};
+  
+export const generateSampleInvoice = async (userId) => {
+    try {
+      const response = await axios.post(`${API_URL}/invoices/generate`, {
+        userId,
+        planDetails: "Sample Premium Plan",
+        amount: 1000
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Invoice generation error:', error.response ? error.response.data : error.message);
+      throw error;
+    }
+  };
+
+export const getInvoices = async (userId) => {
+    try {
+      const response = await axios.get(`${API_URL}/invoices/${userId}`);
+      return response.data;
+    } catch (error) {
+      console.error('Fetch invoices error:', error.response ? error.response.data : error.message);
+      throw error;
+    }
+};
+
+export const registerGST = (recruiterData) =>
+  axios.post(`${API_URL}/recruiters/register`, recruiterData);
+
+export const generateInvoice = (invoiceData) =>
+  axios.post(`${API_URL}/invoices/generate`, invoiceData);
+
+export const downloadGstInvoice = (invoiceId) => axios.get(`${API_URL}/invoices/download/${invoiceId}`);
+
+export const getNotifications = (recruiterId) =>
+  axios.get(`${API_URL}/notifications/${recruiterId}`);
+
+
+
 export default api;
