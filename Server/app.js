@@ -13,14 +13,14 @@ const { initCronJobs } = require("./utils/cronJobs");
 
 const app = express();
 
-//https://job-posting-management-liard.vercel.app
+//https://recruiter-portal-theta.vercel.app
 //http://localhost:3000
 
 // Middleware
 app.use(bodyParser.json());
 app.use(
   cors({
-    origin: "https://recruiter-portal-theta.vercel.app",
+    origin: "http://localhost:3000",
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })

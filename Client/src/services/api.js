@@ -1,8 +1,8 @@
 import axios from "axios";
 import Cookies from "js-cookie";
-//https://job-posting-management.onrender.com
+//https://recruiter-portal.onrender.com
 //http://localhost:5000
-const API_URL = "https://recruiter-portal.onrender.com";
+const API_URL = "http://localhost:5000";
 
 export const api = axios.create({
   baseURL: API_URL,

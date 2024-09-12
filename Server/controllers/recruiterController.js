@@ -23,12 +23,21 @@ exports.register = async (req, res) => {
       companyWebsite,
       password,
       agreedToTerms,
+      gstNumber,
     } = req.body;
 
     if (!email.includes("@") || email.split("@")[1].split(".").length < 2) {
       return res.status(400).json({ message: "Invalid email format" });
     }
 
+    if (
+      gstNumber &&
+      !/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/.test(
+        gstNumber
+      )
+    ) {
+      return res.status(400).json({ message: "Invalid GST number" });
+    }
     if (!agreedToTerms) {
       return res
         .status(400)
@@ -44,6 +53,7 @@ exports.register = async (req, res) => {
       companyWebsite,
       password,
       agreedToTerms,
+      gstNumber,
       verificationToken: Math.random().toString(36).substring(2, 15),
       isDocumentVerified: false,
     });
@@ -116,7 +126,9 @@ exports.verifyOTP = async (req, res) => {
 
     const token = jwt.sign({ id: recruiter._id }, "mani", { expiresIn: "1h" });
 
-    res.status(200).json({ message: "Login successful", token, id: recruiter.id });
+    res
+      .status(200)
+      .json({ message: "Login successful", token, id: recruiter.id });
   } catch (error) {
     console.error(error);
 
@@ -336,7 +348,7 @@ exports.getUnverifiedDocuments = async (req, res) => {
   }
 };
 
-exports.updatePreferences=async(req,res)=>{
+exports.updatePreferences = async (req, res) => {
   try {
     const { id } = req.params;
     const notificationPreferences = req.body;
@@ -348,16 +360,21 @@ exports.updatePreferences=async(req,res)=>{
     );
 
     if (!updatedRecruiter) {
-      return res.status(404).json({ success: false, error: 'Recruiter not found' });
+      return res
+        .status(404)
+        .json({ success: false, error: "Recruiter not found" });
     }
 
     res.status(200).json({
       success: true,
-      message: 'Notification preferences updated successfully',
-      notificationPreferences: updatedRecruiter.notificationPreferences
+      message: "Notification preferences updated successfully",
+      notificationPreferences: updatedRecruiter.notificationPreferences,
     });
   } catch (error) {
-    console.error('Error updating notification preferences:', error);
-    res.status(500).json({ success: false, error: 'An error occurred while updating notification preferences' });
+    console.error("Error updating notification preferences:", error);
+    res.status(500).json({
+      success: false,
+      error: "An error occurred while updating notification preferences",
+    });
   }
-}
+};

@@ -73,6 +73,12 @@ const RegistrationForm = () => {
   const [loading, setLoading] = useState(false);
   const password = watch("password");
 
+  const validateGSTNumber = (gstNumber) => {
+    const gstRegex =
+      /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/;
+    return gstRegex.test(gstNumber) || "Invalid GST number";
+  };
+
   const onSubmit = async (data) => {
     if (data.password !== data.confirmPassword) {
       alert("Passwords don't match");
@@ -159,6 +165,17 @@ const RegistrationForm = () => {
       />
       {errors.companyWebsite && (
         <ErrorMessage>{errors.companyWebsite.message}</ErrorMessage>
+      )}
+
+      <Input
+        type="text"
+        placeholder="GST Number (optional)"
+        {...register("gstNumber", {
+          validate: validateGSTNumber,
+        })}
+      />
+      {errors.gstNumber && (
+        <ErrorMessage>{errors.gstNumber.message}</ErrorMessage>
       )}
 
       <Input

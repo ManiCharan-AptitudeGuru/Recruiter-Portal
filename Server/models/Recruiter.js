@@ -34,6 +34,16 @@ const RecruiterSchema = new mongoose.Schema({
     type: String,
     default: "free",
   },
+  gstNumber: {
+    type: String,
+    validate: {
+      validator: function (v) {
+        return /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/.test(v);
+      },
+      message: (props) => `${props.value} is not a valid GST number`,
+    },
+    required: false,
+  },
   isDocumentVerified: { type: Boolean, default: false },
   isApproved: { type: Boolean, default: false },
   agreedToTerms: { type: Boolean, required: true },

@@ -234,6 +234,12 @@ function Navbar() {
               <LinkText>Subscription</LinkText>
             </NavLink>
           </NavItem>
+          <NavItem>
+            <NavLink to="/invoices" active={isActive('/invoices')}>
+              <IconWrapper><StyledIcon as={Assignment} /></IconWrapper>
+              <LinkText>Invoices</LinkText>
+            </NavLink>
+          </NavItem>
         </NavList>
       </div>
       <BottomSection>
