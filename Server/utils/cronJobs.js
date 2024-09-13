@@ -6,10 +6,11 @@ const {
   sendAdminReminder,
   sendPaymentReminder,
 } = require("../controllers/notificationController");
+
 const GstInvoice = require("../models/GstInvoice");
 
 //Gst Invoice
-const setupCronJobs = () => {
+exports.setupCronJobs = () => {
   // Run every day at midnight
   cron.schedule("0 0 * * *", async () => {
     const today = new Date();
@@ -27,7 +28,7 @@ const setupCronJobs = () => {
     }
 
     // Check for pending invoices and send reminders
-    const pendingInvoices = await Invoice.find({ status: "Pending" });
+    const pendingInvoices = await GstInvoice.find({ status: "Pending" });
     for (const invoice of pendingInvoices) {
       const daysOverdue = Math.ceil(
         (today - invoice.generationDate) / (1000 * 60 * 60 * 24)
@@ -38,8 +39,6 @@ const setupCronJobs = () => {
     }
   });
 };
-
-module.exports = setupCronJobs;
 
 const updateJobPostingStatuses = async () => {
   const now = new Date();
@@ -62,8 +61,6 @@ const updateJobPostingStatuses = async () => {
   }
 };
 
-const initCronJobs = () => {
+exports.initCronJobs = () => {
   cron.schedule("0 * * * *", updateJobPostingStatuses);
 };
-
-module.exports = { initCronJobs };

@@ -37,7 +37,7 @@ const GstManagement = () => {
   const [invoice, setInvoice] = useState(null);
 
   const recruiterId = Cookies.get("id");
-
+  
   const handleInvoiceGenerated = (invoiceData) => {
     setInvoice(invoiceData);
   };

@@ -2,7 +2,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 //https://recruiter-portal.onrender.com
 //http://localhost:5000
-const API_URL = "http://localhost:5000";
+const API_URL = "https://recruiter-portal.onrender.com";
 
 export const api = axios.create({
   baseURL: API_URL,
@@ -253,9 +253,9 @@ export const registerGST = (recruiterData) =>
   axios.post(`${API_URL}/recruiters/register`, recruiterData);
 
 export const generateInvoice = (invoiceData) =>
-  axios.post(`${API_URL}/invoices/generate`, invoiceData);
+  axios.post(`${API_URL}/gstinvoices/generate`, invoiceData);
 
-export const downloadGstInvoice = (invoiceId) => axios.get(`${API_URL}/invoices/download/${invoiceId}`);
+export const downloadGstInvoice = (invoiceId) => axios.get(`${API_URL}/gstinvoices/download/${invoiceId}`);
 
 export const getNotifications = (recruiterId) =>
   axios.get(`${API_URL}/notifications/${recruiterId}`);

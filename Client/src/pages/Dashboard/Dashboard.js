@@ -9,7 +9,6 @@ function Dashboard() {
     <>
     <Header>
       <WelcomeHeader>Hello Recruiter!</WelcomeHeader>
-      <PremiumButton/>
       </Header>
       <DashboardContainer>
         <Card>

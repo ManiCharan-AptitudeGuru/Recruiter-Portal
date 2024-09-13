@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const invoiceController = require("../controllers/invoiceController");
+const gstInvoiceController = require("../controllers/gstInvoiceController");
 
-router.post("/generate", invoiceController.generateInvoice);
-router.get("/download/:invoiceId", invoiceController.downloadInvoice);
+router.post("/generate", gstInvoiceController.generateInvoice);
+router.get("/download/:invoiceId", gstInvoiceController.downloadInvoice);
 
 module.exports = router;

@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const InvoiceSchema = new mongoose.Schema({
+const GstInvoiceSchema = new mongoose.Schema({
   recruiter: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Recruiter",
@@ -14,4 +14,4 @@ const InvoiceSchema = new mongoose.Schema({
   generationDate: { type: Date, default: Date.now },
 });
 
-module.exports = mongoose.model("Invoice", InvoiceSchema);
+module.exports = mongoose.model("GstInvoice", GstInvoiceSchema);
