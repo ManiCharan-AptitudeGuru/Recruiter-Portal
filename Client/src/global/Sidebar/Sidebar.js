@@ -84,6 +84,8 @@ const BottomSection = styled.div`
   padding: 20px;
   background-color: #2c3e50;
   margin-top: auto;
+  border-top-left-radius:30px;
+  border-top-right-radius:30px;
 `;
 
 const NotificationContainer = styled.div`
