@@ -9,6 +9,7 @@ const RegistrationContainer = styled.div`
   align-items: center;
   justify-content: center;
   min-height: 100vh;
+  width:100vw;
   background-color: #f0f2f5;
   padding: 2rem;
 `;
