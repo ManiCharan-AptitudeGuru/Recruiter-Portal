@@ -9,11 +9,9 @@ import PremiumButton from '../PremiumButton/Button';
 const HeaderContainer = styled.header`
   background-color: #34495e;
   color: #ecf0f1;
-  padding: 0 20px;
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  position: fixed;
   top: 0;
   left: 270px;
   right: 0;

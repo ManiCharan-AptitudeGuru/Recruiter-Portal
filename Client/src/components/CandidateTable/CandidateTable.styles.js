@@ -39,7 +39,7 @@ export const BubbleContainer = styled.div`
 //#3b82f6 #f3f4f6
 
 export const BubbleFilter = styled.button`
-  background-color: ${props => props.active ? '#000000' : '#ffffff'};
+  background-color: ${props => props.active ? '#3b82f6' : '#ffffff'};
   color: ${props => props.active ? 'white' : '#000000'};
   border: 1px solid #d1d5db;
   padding: 6px 12px;

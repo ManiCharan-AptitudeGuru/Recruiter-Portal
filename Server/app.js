@@ -8,8 +8,7 @@ const templatesRoutes = require("./routes/templates");
 const recruiterRoutes = require("./routes/recruiterRoutes");
 const premiumPlansRoutes = require("./routes/plans");
 const invoiceRoutes = require("./routes/invoice");
-const gstInvoiceRoutes = require("./routes/gstInvoice");  //Gst Invoice
-const notificationRoutes = require("./routes/notificationRoutes");
+const reportRoutes = require('./routes/reportRoutes');
 const errorHandler = require("./middleware/errorHandler");
 const { connectDB } = require("./config/db");
 const { initCronJobs } = require("./utils/cronJobs");
@@ -22,7 +21,7 @@ const app = express();
 app.use(bodyParser.json());
 app.use(
   cors({
-    origin: "https://recruiter-portal-theta.vercel.app",
+    origin: "http://localhost:3000",
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
@@ -40,12 +39,9 @@ app.use("/audit-trail", auditTrailRoutes);
 app.use("/templates", templatesRoutes);
 app.use("/recruiters", recruiterRoutes);
 app.use("/premium-plans", premiumPlansRoutes);
-app.use("/invoices" , invoiceRoutes);
-app.use("/gstinvoices" , gstInvoiceRoutes);
-app.use("/notifications" , notificationRoutes);
-
+app.use("/", invoiceRoutes);
+app.use('/' , reportRoutes);
 // Error handling middleware
 app.use(errorHandler);
 
 module.exports = app;
-

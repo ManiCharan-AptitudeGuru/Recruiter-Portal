@@ -10,19 +10,24 @@ const FooterContainer = styled.footer`
   flex-direction: column;
   align-items: center;
   width: 100%;
+  box-sizing: border-box;
 `;
 
 const FooterContent = styled.div`
   display: flex;
+  flex-wrap: wrap; /* Allow wrapping of children */
   justify-content: space-between;
   width: 100%;
   max-width: 1200px;
   margin-bottom: 20px;
+  box-sizing: border-box; /* Ensure padding and border are included in the width */
 `;
 
 const FooterSection = styled.div`
   display: flex;
   flex-direction: column;
+  flex: 1;
+  min-width: 200px; /* Prevent sections from becoming too narrow */
 `;
 
 const FooterTitle = styled.h3`
@@ -47,6 +52,7 @@ const Copyright = styled.p`
   font-size: 12px;
   color: #bdc3c7;
   margin-top: 20px;
+  text-align: center; /* Center the text in the footer */
 `;
 
 const Footer = () => {

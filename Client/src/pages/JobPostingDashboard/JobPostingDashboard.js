@@ -51,12 +51,13 @@ const JobPostingDashboard = () => {
 
   useEffect(() => {
     setIsLoading(true);
+    const userId = Cookies.get("id");
     const fetchJobPostingsAndAuditTrail = async () => {
       try {
         const [jobPostingsResponse, auditTrailResponse, templatesResponse] =
           await Promise.all([
             getAllJobPosting(),
-            getAuditTrailForJob("all"),
+            getAuditTrailForJob(userId),
             getAllTemplates(),
           ]);
         setJobPostings(jobPostingsResponse);
@@ -266,7 +267,7 @@ const JobPostingDashboard = () => {
       const response = createAuditTrailEntry(auditEntry);
       const newAuditEntry = response.data.auditEntry;
       setAuditTrail((prev) => [newAuditEntry, ...prev]);
-      const auditTrailResponse = await getAuditTrailForJob("all");
+      const auditTrailResponse = await getAuditTrailForJob(userId);
       setAuditTrail(auditTrailResponse);
     } catch (error) {
       console.error("Error adding audit trail entry:", error);

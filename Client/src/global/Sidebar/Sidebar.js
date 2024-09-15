@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { Dashboard, Work, People, Assignment, Settings, Logout } from '@styled-icons/material';
 import { FaFileInvoiceDollar } from "react-icons/fa";
-import { TbCirclePercentage } from "react-icons/tb"
+import { SiSimpleanalytics } from "react-icons/si";
 import styled, { css } from 'styled-components';
 import Cookies from 'js-cookie';
 
@@ -62,6 +62,11 @@ const NavLink = styled(Link)`
   `}
 `;
 
+const SubNavList = styled.ul`
+  list-style-type: none;
+  padding-left: 40px;
+`;
+
 const IconWrapper = styled.span`
   margin-right: 15px;
   display: flex;
@@ -91,7 +96,7 @@ const BottomSection = styled.div`
 const NotificationContainer = styled.div`
   position: fixed;
   top: 70px;
-  left: 290px; // Adjust to match your sidebar width
+  left: 290px;
   right: 30px;
   border-radius:40px;
   background-color: #3498db;
@@ -130,13 +135,16 @@ const navItems = [
   { path: '/candidates', icon: People, text: 'Candidates' },
   { path: '/subscription', icon: Assignment, text: 'Subscription' },
   { path: '/invoices', icon: FaFileInvoiceDollar, text: 'Invoices' },
-  { path: '/gst-remainder', icon: TbCirclePercentage, text: 'GST Remainder' },
+  { path: '/reports', icon: SiSimpleanalytics, text: 'Reports', subItems: [
+      { path: '/reports/dashboard', text: 'Dashboard' },
+    ]},
 ];
 
 function Sidebar() {
   const navigate = useNavigate();
   const location = useLocation();
   const [showLogoutNotification, setShowLogoutNotification] = useState(false);
+  const [expandedItem, setExpandedItem] = useState(null);
 
   const handleLogout = () => {
     Cookies.remove('token');
@@ -145,18 +153,36 @@ function Sidebar() {
 
   const isActive = (path) => location.pathname === path;
 
+  const toggleExpand = (item) => {
+    setExpandedItem(expandedItem === item ? null : item);
+  };
+
   return (
     <>
       <NavContainer>
         <TopSection>
-          <Logo>RecruiterPortal</Logo>
+          <Logo>Recruiter Portal</Logo>
         </TopSection>
         <NavList>
           {navItems.map(item => (
-            <NavLink key={item.path} to={item.path} active={isActive(item.path)}>
-              <IconWrapper><StyledIcon as={item.icon} /></IconWrapper>
-              <LinkText>{item.text}</LinkText>
-            </NavLink>
+            <div key={item.path}>
+              <NavLink 
+                to={item.subItems ? '#' : item.path} 
+                active={isActive(item.path)} 
+                onClick={() => item.subItems && toggleExpand(item.path)}>
+                <IconWrapper><StyledIcon as={item.icon} /></IconWrapper>
+                <LinkText>{item.text}</LinkText>
+              </NavLink>
+              {item.subItems && expandedItem === item.path && (
+                <SubNavList>
+                  {item.subItems.map(subItem => (
+                    <NavLink key={subItem.path} to={subItem.path} active={isActive(subItem.path)}>
+                      <LinkText>{subItem.text}</LinkText>
+                    </NavLink>
+                  ))}
+                </SubNavList>
+              )}
+            </div>
           ))}
         </NavList>
         <BottomSection>

@@ -2,7 +2,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 //https://recruiter-portal.onrender.com
 //http://localhost:5000
-const API_URL = "https://recruiter-portal.onrender.com";
+const API_URL = "http://localhost:5000";
 
 export const api = axios.create({
   baseURL: API_URL,
@@ -136,9 +136,9 @@ export const createAuditTrailEntry = async (auditEntry) => {
   }
 };
 
-export const getAuditTrailForJob = async (jobId) => {
+export const getAuditTrailForJob = async (userId) => {
   try {
-    const response = await api.get(`/audit-trail/${jobId}`);
+    const response = await api.get(`/audit-trail/${userId}`);
     return response.data;
   } catch (error) {
     return handleApiError({ error: "Failed to fetch audit trail entries" });
@@ -214,52 +214,51 @@ export const updateNotificationPreferences = async (preferences) => {
 };
 
 export const downloadInvoice = async (invoiceId) => {
-  const response = await axios.get(`${API_URL}/invoices/${invoiceId}/download`, {
-    responseType: 'blob'
+  const response = await api.get(`/invoices/${invoiceId}/download`, {
+    responseType: "blob",
   });
   const url = window.URL.createObjectURL(new Blob([response.data]));
-  const link = document.createElement('a');
+  const link = document.createElement("a");
   link.href = url;
-  link.setAttribute('download', `invoice-${invoiceId}.pdf`);
+  link.setAttribute("download", `invoice-${invoiceId}.pdf`);
   document.body.appendChild(link);
   link.click();
 };
-  
+
 export const generateSampleInvoice = async (userId) => {
-    try {
-      const response = await axios.post(`${API_URL}/invoices/generate`, {
-        userId,
-        planDetails: "Sample Premium Plan",
-        amount: 1000
-      });
-      return response.data;
-    } catch (error) {
-      console.error('Invoice generation error:', error.response ? error.response.data : error.message);
-      throw error;
-    }
-  };
+  try {
+    const response = await api.post(`/invoices/generate`, {
+      userId,
+      planDetails: "Sample Premium Plan",
+      amount: 1000,
+    });
+    return response.data;
+  } catch (error) {
+    console.error(
+      "Invoice generation error:",
+      error.response ? error.response.data : error.message
+    );
+    throw error;
+  }
+};
 
 export const getInvoices = async (userId) => {
-    try {
-      const response = await axios.get(`${API_URL}/invoices/${userId}`);
-      return response.data;
-    } catch (error) {
-      console.error('Fetch invoices error:', error.response ? error.response.data : error.message);
-      throw error;
-    }
+  try {
+    const response = await api.get(`/invoices/${userId}`);
+    return response.data;
+  } catch (error) {
+    console.error(
+      "Fetch invoices error:",
+      error.response ? error.response.data : error.message
+    );
+    throw error;
+  }
 };
 
 export const registerGST = (recruiterData) =>
-  axios.post(`${API_URL}/recruiters/register`, recruiterData);
+  api.post(`/recruiters/register`, recruiterData);
 
 export const generateInvoice = (invoiceData) =>
-  axios.post(`${API_URL}/gstinvoices/generate`, invoiceData);
-
-export const downloadGstInvoice = (invoiceId) => axios.get(`${API_URL}/gstinvoices/download/${invoiceId}`);
-
-export const getNotifications = (recruiterId) =>
-  axios.get(`${API_URL}/notifications/${recruiterId}`);
-
-
+  api.post(`/gstinvoices/generate`, invoiceData);
 
 export default api;

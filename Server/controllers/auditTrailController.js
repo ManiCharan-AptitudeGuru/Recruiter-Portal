@@ -31,14 +31,10 @@ exports.createAuditTrailEntry = async (req, res) => {
 // Get audit trail entries for a specific job or all jobs
 exports.getAuditTrailEntries = async (req, res) => {
   try {
-    const jobId = req.params.jobId;
+    const userId = req.params.userId;
     let auditEntries;
 
-    if (jobId === "all") {
-      auditEntries = await AuditTrail.find().sort({ timestamp: -1 });
-    } else {
-      auditEntries = await AuditTrail.find({ jobId }).sort({ timestamp: -1 });
-    }
+      auditEntries = await AuditTrail.find({ recruiterId:userId }).sort({ timestamp: -1 });
     res.status(200).json(auditEntries);
   } catch (error) {
     console.error("Error fetching audit trail entries:", error);

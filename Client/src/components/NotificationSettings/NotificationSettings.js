@@ -133,14 +133,14 @@ const UpdateButton = styled.button`
 `;
 
 const defaultPreferences = {
-  newCandidateApplications: ['email', 'sms', 'in-app'],
-  subscriptionRenewals: ['email', 'sms', 'in-app'],
-  profileChanges: ['email', 'sms', 'in-app'],
-  verificationStatuses: ['email', 'sms', 'in-app'],
-  jobApplicationUpdates: ['email', 'sms', 'in-app'],
-  paymentConfirmations: ['email', 'sms', 'in-app'],
-  loginAlerts: ['email', 'sms'],
-  unusualActivity: ['email', 'sms'],
+  "New Candidate Applications": ['email', 'sms', 'in-app'],
+  "Subscription Renewals": ['email', 'sms', 'in-app'],
+  "Profile Changes": ['email', 'sms', 'in-app'],
+  "Verification Statuses": ['email', 'sms', 'in-app'],
+  "Job Application Updates": ['email', 'sms', 'in-app'],
+  "Payment Confirmations": ['email', 'sms', 'in-app'],
+  "Login Alerts": ['email', 'sms'],
+  "Unusual Activity": ['email', 'sms'],
 };
 
 function NotificationSettings() {
@@ -150,6 +150,7 @@ function NotificationSettings() {
 
   const onSubmit = async (data) => {
     try {
+      console.log(data)
       const response = await updateNotificationPreferences(data);
       if (response.success) {
         alert('Preferences updated successfully');

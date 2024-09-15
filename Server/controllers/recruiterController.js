@@ -351,7 +351,18 @@ exports.getUnverifiedDocuments = async (req, res) => {
 exports.updatePreferences = async (req, res) => {
   try {
     const { id } = req.params;
-    const notificationPreferences = req.body;
+    const clientData = req.body;
+
+    const notificationPreferences = {
+      newCandidateApplications: clientData["New Candidate Applications"],
+      subscriptionRenewals: clientData["Subscription Renewals"],
+      profileChanges: clientData["Profile Changes"],
+      verificationStatuses: clientData["Verification Statuses"],
+      jobApplicationUpdates: clientData["Job Application Updates"],
+      paymentConfirmations: clientData["Payment Confirmations"],
+      loginAlerts: clientData["Login Alerts"],
+      unusualActivity: clientData["Unusual Activity"],
+    };
 
     const updatedRecruiter = await Recruiter.findByIdAndUpdate(
       id,

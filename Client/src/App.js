@@ -17,9 +17,11 @@ import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 import HomePage from './pages/HomePage/HomePage';
 import PremiumPlans from './components/PremiumPlans/PremiumPlans';
 import Invoice from './pages/Invoice/Invoice';
-import GstManagement from './pages/GstManagement/GstManagement';
 import { GlobalStateProvider } from './context/GlobalStateContext';
 import AdminDashboardPage from './pages/AdminDashboard/AdminDashboardPage';
+import ReportDashboard from './components/ReportDashboard/Dashboard';
+import CustomForm from './components/CustomForm/CustomForm';
+import ReportBuilder from './components/ReportBuilder/ReportBuilder';
 
 const AppContainer = styled.div`
   font-family: 'Arial', sans-serif;
@@ -42,7 +44,6 @@ const ProtectedMainContent = styled(MainContent)`
 
 const ContentArea = styled.div`
   flex-grow: 1;
-  padding: 80px 20px 20px; // Adjusted top padding to account for fixed header
 `;
 
 const FullWidthContent = styled.div`
@@ -101,10 +102,9 @@ function AppContent() {
               path="/invoices"
               element={<ProtectedLayout><Invoice /></ProtectedLayout>}
             />
-            <Route
-              path="/gst-remainder"
-              element={<ProtectedLayout><GstManagement /></ProtectedLayout>}
-            />
+            <Route path= "/reports/dashboard" element={<ProtectedLayout><ReportDashboard/></ProtectedLayout>}/>
+            <Route path="/reports/custom-form" element={<ProtectedLayout><CustomForm/></ProtectedLayout>}/>
+            <Route path="/reports/custom-form/user" element={<ProtectedLayout> <ReportBuilder/> </ProtectedLayout>}/>
           </Route>
       
           <Route path="/welcome" element={<FullWidthContent><HomePage /></FullWidthContent>} />
