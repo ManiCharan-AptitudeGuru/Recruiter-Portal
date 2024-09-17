@@ -9,18 +9,25 @@ import {
   FormSelect,
   FormButton,
 } from "./StyledComponents";
+import axios from "axios";
+import { createCustomForm } from "../../services/api";
 
 const CustomForm = () => {
-  const navigate=useNavigate()
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log(data);
-    navigate('/reports/custom-form/user')
+  const onSubmit = async (data) => {
+    try {
+      const response = await createCustomForm(data);
+      console.log(response.data);
+      navigate("/reports/custom-form/user");
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    }
   };
 
   return (
@@ -33,7 +40,7 @@ const CustomForm = () => {
           marginBottom: "10px",
           paddingLeft: "0px",
           textDecoration: "underline",
-          marginTop:"0px"
+          marginTop: "0px",
         }}
       >
         Candidate Information

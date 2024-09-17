@@ -24,6 +24,7 @@ exports.register = async (req, res) => {
       password,
       agreedToTerms,
       gstNumber,
+      supervisorEmail, 
     } = req.body;
 
     if (!email.includes("@") || email.split("@")[1].split(".").length < 2) {
@@ -38,10 +39,16 @@ exports.register = async (req, res) => {
     ) {
       return res.status(400).json({ message: "Invalid GST number" });
     }
+
     if (!agreedToTerms) {
       return res
         .status(400)
         .json({ message: "You must agree to the terms and conditions" });
+    }
+
+    // Validate supervisor email if provided
+    if (supervisorEmail && (!supervisorEmail.includes("@") || supervisorEmail.split("@")[1].split(".").length < 2)) {
+      return res.status(400).json({ message: "Invalid supervisor email format" });
     }
 
     const recruiter = new Recruiter({
@@ -54,6 +61,7 @@ exports.register = async (req, res) => {
       password,
       agreedToTerms,
       gstNumber,
+      supervisorEmail,
       verificationToken: Math.random().toString(36).substring(2, 15),
       isDocumentVerified: false,
     });
@@ -93,10 +101,20 @@ exports.verifyEmail = async (req, res) => {
 
 exports.login = async (req, res) => {
   try {
-    const { email } = req.body;
+    const { email, password } = req.body;
     const recruiter = await Recruiter.findOne({ email });
-    if (!recruiter || !recruiter.isVerified || !recruiter.isApproved) {
-      return res.status(401).json({ message: "Unauthorized" });
+    
+    if (!recruiter) {
+      return res.status(404).json({ message: "Email is not registered" });
+    }
+
+    if (!recruiter.isVerified || !recruiter.isApproved) {
+      return res.status(401).json({ message: "Account is not verified or approved" });
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, recruiter.password);
+    if (!isPasswordValid) {
+      return res.status(401).json({ message: "Invalid password" });
     }
 
     const otp = generateOTP();
@@ -106,6 +124,7 @@ exports.login = async (req, res) => {
 
     await sendOTP(recruiter.email, otp);
   } catch (error) {
+    console.log(error)
     res.status(500).json({ message: "Error logging in", error: error.message });
   }
 };
@@ -124,17 +143,12 @@ exports.verifyOTP = async (req, res) => {
     await recruiter.save();
     await sendLoginAlert(recruiter.email, new Date(), req.ip);
 
-    const token = jwt.sign({ id: recruiter._id }, "mani", { expiresIn: "1h" });
+    const token = jwt.sign({ id: recruiter._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
 
-    res
-      .status(200)
-      .json({ message: "Login successful", token, id: recruiter.id });
+    res.status(200).json({ message: "Login successful", token, id: recruiter.id });
   } catch (error) {
     console.error(error);
-
-    res
-      .status(500)
-      .json({ message: "Error verifying OTP", error: error.message });
+    res.status(500).json({ message: "Error verifying OTP", error: error.message });
   }
 };
 

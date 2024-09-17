@@ -2,7 +2,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 //https://recruiter-portal.onrender.com
 //http://localhost:5000
-const API_URL = "https://recruiter-portal.onrender.com";
+const API_URL = "http://localhost:5000";
 
 export const api = axios.create({
   baseURL: API_URL,
@@ -26,13 +26,12 @@ export const registerRecruiter = async (data) => {
   }
 };
 
-export const sendOTP = async (email) => {
+export const login = async (data) => {
   try {
-    const response = await api.post("/recruiters/login", email);
+    const response = await api.post("/recruiters/login", data);
     return response.data;
   } catch (error) {
-    console.log(error);
-
+    console.error(error);
     handleApiError(error);
   }
 };
@@ -46,6 +45,7 @@ export const verifyOTP = async ({ email, otp, encryptedOTP }) => {
     });
     return response.data;
   } catch (error) {
+    console.error(error);
     handleApiError(error);
   }
 };
@@ -260,5 +260,9 @@ export const registerGST = (recruiterData) =>
 
 export const generateInvoice = (invoiceData) =>
   api.post(`/gstinvoices/generate`, invoiceData);
+
+export const createCustomForm=(formData)=>{
+  api.post("",formData)
+}
 
 export default api;

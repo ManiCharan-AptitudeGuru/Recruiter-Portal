@@ -44,6 +44,15 @@ const RecruiterSchema = new mongoose.Schema({
     },
     required: false,
   },
+  supervisorEmail: { 
+    type: String,
+    validate: {
+      validator: function(v) {
+        return /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(v);
+      },
+      message: props => `${props.value} is not a valid email address!`
+    },
+  },
   isDocumentVerified: { type: Boolean, default: false },
   isApproved: { type: Boolean, default: false },
   agreedToTerms: { type: Boolean, required: true },

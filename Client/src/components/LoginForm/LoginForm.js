@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
 import { useNavigate, Link } from "react-router-dom";
-import { sendOTP,verifyOTP } from "../../services/api";
+import { login, verifyOTP } from "../../services/api";
 import Cookies from "js-cookie";
 import { ThreeDots } from 'react-loader-spinner';
 
@@ -59,17 +59,19 @@ const LoginForm = () => {
   const [otpSent, setOtpSent] = useState(false);
   const [encryptedOTP, setEncryptedOTP] = useState("");
   const [loading, setLoading] = useState(false);
+  const [loginError, setLoginError] = useState("");
   const navigate = useNavigate();
 
-  const handleSendOTP = async ({ email }) => {
+  const handleLogin = async ({ email, password }) => {
     setLoading(true);
+    setLoginError("");
     try {
-      const response = await sendOTP({ email });
+      const response = await login({ email, password });
       setEncryptedOTP(response.encryptedOTP);
       setOtpSent(true);
       alert(response.message || "OTP sent successfully");
     } catch (error) {
-      alert(error.message || "An error occurred while sending OTP.");
+      setLoginError(error.response?.data?.message || "An error occurred while logging in.");
     } finally {
       setLoading(false);
     }
@@ -91,13 +93,25 @@ const LoginForm = () => {
   };
 
   return (
-    <FormContainer onSubmit={handleSubmit(otpSent ? handleVerifyOTP : handleSendOTP)}>
+    <FormContainer onSubmit={handleSubmit(otpSent ? handleVerifyOTP : handleLogin)}>
       <Input
         type="email"
         placeholder="Email"
         {...register("email", { required: "Email is required" })}
       />
       {errors.email && <ErrorMessage>{errors.email.message}</ErrorMessage>}
+      
+      {!otpSent && (
+        <>
+          <Input
+            type="password"
+            placeholder="Password"
+            {...register("password", { required: "Password is required" })}
+          />
+          {errors.password && <ErrorMessage>{errors.password.message}</ErrorMessage>}
+        </>
+      )}
+
       {otpSent && (
         <Input
           type="text"
@@ -106,6 +120,8 @@ const LoginForm = () => {
         />
       )}
       {errors.otp && <ErrorMessage>{errors.otp.message}</ErrorMessage>}
+
+      {loginError && <ErrorMessage>{loginError}</ErrorMessage>}
 
       {loading ? (
         <ThreeDots
@@ -118,7 +134,7 @@ const LoginForm = () => {
           visible={true}
         />
       ) : (
-        <Button type="submit">{otpSent ? "Verify OTP" : "Send OTP"}</Button>
+        <Button type="submit">{otpSent ? "Verify OTP" : "Login"}</Button>
       )}
 
       <RegisterLink>

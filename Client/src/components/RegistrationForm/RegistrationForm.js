@@ -63,6 +63,12 @@ const LoginLink = styled.p`
   }
 `;
 
+const Select = styled.select`
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+`;
+
 const RegistrationForm = () => {
   const {
     register,
@@ -176,6 +182,21 @@ const RegistrationForm = () => {
       />
       {errors.gstNumber && (
         <ErrorMessage>{errors.gstNumber.message}</ErrorMessage>
+      )}
+
+      <Input
+        type="email"
+        placeholder="Supervisor's Email"
+        {...register("supervisorEmail", {
+          required: "Email is required",
+          pattern: {
+            value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+            message: "Invalid email address",
+          },
+        })}
+      />
+      {errors.supervisorEmail && (
+        <ErrorMessage>{errors.supervisorEmail.message}</ErrorMessage>
       )}
 
       <Input
