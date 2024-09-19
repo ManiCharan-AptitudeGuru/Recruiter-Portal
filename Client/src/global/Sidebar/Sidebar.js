@@ -137,6 +137,8 @@ const navItems = [
   { path: '/invoices', icon: FaFileInvoiceDollar, text: 'Invoices' },
   { path: '/reports', icon: SiSimpleanalytics, text: 'Reports', subItems: [
       { path: '/reports/dashboard', text: 'Dashboard' },
+      { path: '/reports/schedule', text: 'Schedule Reports' },
+      { path: '/reports/exports', text: 'Exports' },
     ]},
 ];
 

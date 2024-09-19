@@ -22,6 +22,8 @@ import AdminDashboardPage from './pages/AdminDashboard/AdminDashboardPage';
 import ReportDashboard from './components/ReportDashboard/Dashboard';
 import CustomForm from './components/CustomForm/CustomForm';
 import ReportBuilder from './components/ReportBuilder/ReportBuilder';
+import ScheduleManager from './pages/ScheduleManager/ScheduleManager';
+import ExportManager from './pages/ExportManager/ExportManager';
 
 const AppContainer = styled.div`
   font-family: 'Arial', sans-serif;
@@ -103,6 +105,8 @@ function AppContent() {
               element={<ProtectedLayout><Invoice /></ProtectedLayout>}
             />
             <Route path= "/reports/dashboard" element={<ProtectedLayout><ReportDashboard/></ProtectedLayout>}/>
+            <Route path="/reports/schedule" element={<ProtectedLayout><ScheduleManager/></ProtectedLayout>}/>
+            <Route path="/reports/exports" element={<ProtectedLayout><ExportManager/></ProtectedLayout>}/>
             <Route path="/reports/custom-form" element={<ProtectedLayout><CustomForm/></ProtectedLayout>}/>
             <Route path="/reports/custom-form/user" element={<ProtectedLayout> <ReportBuilder/> </ProtectedLayout>}/>
           </Route>
