@@ -2,7 +2,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 //https://recruiter-portal.onrender.com
 //http://localhost:5000
-const API_URL = "https://recruiter-portal.onrender.com";
+const API_URL = "http://localhost:5000";
 
 export const api = axios.create({
   baseURL: API_URL,
@@ -43,11 +43,14 @@ export const verifyOTP = async ({ email, otp, encryptedOTP, iv }) => {
       email,
       otp,
       encryptedOTP,
-      iv
+      iv,
     });
     return response.data;
   } catch (error) {
-    console.error("OTP verification error:", error.response?.data || error.message);
+    console.error(
+      "OTP verification error:",
+      error.response?.data || error.message
+    );
     handleApiError(error);
   }
 };
@@ -174,7 +177,7 @@ export const deleteTemplate = async (id) => {
   }
 };
 
-export const getPremiumPlans = async () => {  
+export const getPremiumPlans = async () => {
   try {
     const response = await api.get(`/premium-plans?userId=${userId}`);
     return response.data;
@@ -263,8 +266,8 @@ export const registerGST = (recruiterData) =>
 export const generateInvoice = (invoiceData) =>
   api.post(`/gstinvoices/generate`, invoiceData);
 
-export const createCustomForm=(formData)=>{
-  api.post("",formData)
-}
+export const createCustomForm = (formData) => {
+  api.post("", formData);
+};
 
 export default api;
