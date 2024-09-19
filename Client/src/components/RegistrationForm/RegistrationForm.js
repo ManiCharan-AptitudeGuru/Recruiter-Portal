@@ -80,6 +80,7 @@ const RegistrationForm = () => {
   const password = watch("password");
 
   const validateGSTNumber = (gstNumber) => {
+    if (!gstNumber) return true;
     const gstRegex =
       /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/;
     return gstRegex.test(gstNumber) || "Invalid GST number";
@@ -178,6 +179,7 @@ const RegistrationForm = () => {
         placeholder="GST Number (optional)"
         {...register("gstNumber", {
           validate: validateGSTNumber,
+          required: false,
         })}
       />
       {errors.gstNumber && (
