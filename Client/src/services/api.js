@@ -29,23 +29,25 @@ export const registerRecruiter = async (data) => {
 export const login = async (data) => {
   try {
     const response = await api.post("/recruiters/login", data);
+    console.log("Login response:", response.data);
     return response.data;
   } catch (error) {
-    console.error(error);
+    console.error("Login error:", error.response?.data || error.message);
     handleApiError(error);
   }
 };
 
-export const verifyOTP = async ({ email, otp, encryptedOTP }) => {
+export const verifyOTP = async ({ email, otp, encryptedOTP, iv }) => {
   try {
     const response = await api.post("/recruiters/verify-otp", {
       email,
       otp,
       encryptedOTP,
+      iv
     });
     return response.data;
   } catch (error) {
-    console.error(error);
+    console.error("OTP verification error:", error.response?.data || error.message);
     handleApiError(error);
   }
 };
@@ -172,7 +174,7 @@ export const deleteTemplate = async (id) => {
   }
 };
 
-export const getPremiumPlans = async () => {
+export const getPremiumPlans = async () => {  
   try {
     const response = await api.get(`/premium-plans?userId=${userId}`);
     return response.data;

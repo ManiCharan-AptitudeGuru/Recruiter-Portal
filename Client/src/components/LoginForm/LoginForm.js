@@ -60,6 +60,7 @@ const LoginForm = () => {
   const [encryptedOTP, setEncryptedOTP] = useState("");
   const [loading, setLoading] = useState(false);
   const [loginError, setLoginError] = useState("");
+  const [iv,setIv]=useState('')
   const navigate = useNavigate();
 
   const handleLogin = async ({ email, password }) => {
@@ -68,6 +69,7 @@ const LoginForm = () => {
     try {
       const response = await login({ email, password });
       setEncryptedOTP(response.encryptedOTP);
+      setIv(response.iv)
       setOtpSent(true);
       alert(response.message || "OTP sent successfully");
     } catch (error) {
@@ -80,7 +82,7 @@ const LoginForm = () => {
   const handleVerifyOTP = async ({ email, otp }) => {
     setLoading(true);
     try {
-      const response = await verifyOTP({ email, otp, encryptedOTP });
+      const response = await verifyOTP({ email, otp, encryptedOTP,iv });
       Cookies.set("token", response.token, { expires: 1, path: "/" });
       Cookies.set("id", response.id, { expires: 1, path: "/" });
       alert(response.message || "OTP verified successfully");

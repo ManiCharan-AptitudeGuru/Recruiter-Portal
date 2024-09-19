@@ -218,7 +218,7 @@ const ReportDashboard = () => {
         const dy = Math.abs(e.changedTouches[0].clientY - mouseDownPos.y);
 
         if (dx < 5 && dy < 5) {
-          navigate("/custom-form");
+          navigate("/reports/custom-form");
           if (actionToPerform) {
             actionToPerform();
           }

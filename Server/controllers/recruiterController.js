@@ -11,6 +11,7 @@ const {
 const { generateOTP } = require("../services/otpService");
 const { encryptData, decryptData } = require("../services/encryptionService");
 const jwt = require("jsonwebtoken");
+const bcrypt=require('bcryptjs')
 
 exports.register = async (req, res) => {
   try {
@@ -118,9 +119,9 @@ exports.login = async (req, res) => {
     }
 
     const otp = generateOTP();
-    const encryptedOTP = encryptData(otp);
+    const { iv, encryptedData: encryptedOTP } = encryptData(otp);
 
-    res.status(200).json({ message: "OTP sent to your email", encryptedOTP });
+    res.status(200).json({ message: "OTP sent to your email", encryptedOTP, iv });
 
     await sendOTP(recruiter.email, otp);
   } catch (error) {
@@ -131,8 +132,13 @@ exports.login = async (req, res) => {
 
 exports.verifyOTP = async (req, res) => {
   try {
-    const { email, otp, encryptedOTP } = req.body;
-    const decryptedOTP = decryptData(encryptedOTP);
+    const { email, otp, encryptedOTP, iv } = req.body;
+    
+    if (!encryptedOTP || !iv) {
+      return res.status(400).json({ message: "Missing encryptedOTP or iv" });
+    }
+
+    const decryptedOTP = decryptData(encryptedOTP, iv);
 
     if (otp !== decryptedOTP) {
       return res.status(401).json({ message: "Invalid OTP" });
@@ -143,7 +149,7 @@ exports.verifyOTP = async (req, res) => {
     await recruiter.save();
     await sendLoginAlert(recruiter.email, new Date(), req.ip);
 
-    const token = jwt.sign({ id: recruiter._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+    const token = jwt.sign({ id: recruiter._id }, 'agh', { expiresIn: "1h" });
 
     res.status(200).json({ message: "Login successful", token, id: recruiter.id });
   } catch (error) {

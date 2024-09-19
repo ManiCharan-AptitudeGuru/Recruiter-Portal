@@ -1,22 +1,21 @@
-// server/services/encryptionService.js
-const crypto = require("crypto");
+const crypto = require('crypto');
 
-const algorithm = "aes-256-cbc";
-const key = crypto.randomBytes(32);
+const algorithm = 'aes-256-cbc';
+const key = crypto.scryptSync('your-secret-key', 'salt', 32);
 const iv = crypto.randomBytes(16);
 
-exports.encryptData = (text) => {
-  let cipher = crypto.createCipheriv(algorithm, Buffer.from(key), iv);
-  let encrypted = cipher.update(text);
-  encrypted = Buffer.concat([encrypted, cipher.final()]);
-  return { iv: iv.toString("hex"), encryptedData: encrypted.toString("hex") };
-};
+function encryptData(data) {
+  const cipher = crypto.createCipheriv(algorithm, key, iv);
+  let encrypted = cipher.update(data, 'utf8', 'hex');
+  encrypted += cipher.final('hex');
+  return { iv: iv.toString('hex'), encryptedData: encrypted };
+}
 
-exports.decryptData = (text) => {
-  let iv = Buffer.from(text.iv, "hex");
-  let encryptedText = Buffer.from(text.encryptedData, "hex");
-  let decipher = crypto.createDecipheriv(algorithm, Buffer.from(key), iv);
-  let decrypted = decipher.update(encryptedText);
-  decrypted = Buffer.concat([decrypted, decipher.final()]);
-  return decrypted.toString();
-};
+function decryptData(encryptedData, ivHex) {
+  const decipher = crypto.createDecipheriv(algorithm, key, Buffer.from(ivHex, 'hex'));
+  let decrypted = decipher.update(encryptedData, 'hex', 'utf8');
+  decrypted += decipher.final('utf8');
+  return decrypted;
+}
+
+module.exports = { encryptData, decryptData };
