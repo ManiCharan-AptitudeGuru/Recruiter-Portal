@@ -9,6 +9,9 @@ const recruiterRoutes = require("./routes/recruiterRoutes");
 const premiumPlansRoutes = require("./routes/plans");
 const invoiceRoutes = require("./routes/invoice");
 const reportRoutes = require('./routes/reportRoutes');
+const createReportRoutes=require('./routes/createReportRoute')
+const exportRoutes=require('./routes/exportRoutes')
+const scheduleRoute=require('./routes/scheduleRoutes')
 const errorHandler = require("./middleware/errorHandler");
 const { connectDB } = require("./config/db");
 const { initCronJobs } = require("./utils/cronJobs");
@@ -41,6 +44,7 @@ app.use("/recruiters", recruiterRoutes);
 app.use("/premium-plans", premiumPlansRoutes);
 app.use("/", invoiceRoutes);
 app.use('/' , reportRoutes);
+
 // Error handling middleware
 app.use(errorHandler);
 
