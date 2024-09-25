@@ -1,19 +1,39 @@
 const JobPosting = require("../models/JobPosting");
 const AuditTrail = require("../models/AuditTrail");
 const { parseISO, isBefore } = require("date-fns");
+const Recruiter = require("../models/Recruiter");
 
 // Create a new job posting
 exports.createJobPosting = async (req, res) => {
   try {
+    const { recruiterId } = req.body;
+    console.log(recruiterId);
+
+    const recruiter = await Recruiter.findById(recruiterId);
+
+    if (!recruiter) {
+      return res.status(404).json({ message: "Recruiter not found" });
+    }
+
+    if (recruiter.numberOfJobPostings <= 0) {
+      return res.status(400).json({
+        message:
+          "You have no available job postings. Please upgrade your plan.",
+      });
+    }
+
     const jobPostingData = req.body;
 
-    // Parse the applicationDeadline string to a Date object
     jobPostingData.applicationDeadline = parseISO(
       jobPostingData.applicationDeadline
     );
 
     const newJobPosting = new JobPosting(jobPostingData);
     await newJobPosting.save();
+
+    recruiter.numberOfJobPostings -= 1;
+    await recruiter.save();
+
     res.status(201).json({
       message: "Job posting created successfully",
       jobPosting: newJobPosting,
@@ -59,14 +79,35 @@ exports.deleteJobPosting = async (req, res) => {
 // Duplicate a job posting
 exports.duplicateJobPosting = async (req, res) => {
   try {
+    // Fetch the original job posting by ID
     const originalJob = await JobPosting.findById(req.params.id);
     if (!originalJob) {
       return res.status(404).json({ message: "Job posting not found" });
     }
+
+    // Fetch the recruiter to check job posting limit
+    const recruiter = await Recruiter.findById(originalJob.recruiterId);
+    if (!recruiter) {
+      return res.status(404).json({ message: "Recruiter not found" });
+    }
+
+    // Check if recruiter has available job postings
+    if (recruiter.numberOfJobPostings <= 0) {
+      return res.status(400).json({
+        message: "You have no available job postings. Please upgrade your plan.",
+      });
+    }
+
+    // Duplicate the job posting
     const duplicatedJob = new JobPosting(originalJob.toObject());
     duplicatedJob._id = undefined;
     duplicatedJob.isNew = true;
     await duplicatedJob.save();
+
+    // Reduce the number of job postings by 1
+    recruiter.numberOfJobPostings -= 1;
+    await recruiter.save();
+
     res.status(201).json({
       message: "Job posting duplicated successfully",
       jobPosting: duplicatedJob,

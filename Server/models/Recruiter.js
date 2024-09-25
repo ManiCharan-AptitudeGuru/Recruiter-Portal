@@ -29,6 +29,7 @@ const RecruiterSchema = new mongoose.Schema({
   password: { type: String, required: true },
   isVerified: { type: Boolean, default: false },
   verificationToken: String,
+  numberOfJobPostings: { type: Number, min: 0 },
   verificationDocuments: [DocumentSchema],
   plan: {
     type: String,

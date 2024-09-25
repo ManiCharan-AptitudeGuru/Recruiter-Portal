@@ -356,7 +356,7 @@ const ReportDashboard = () => {
           </div>
         </WidgetContainer>
 
-        <WidgetContainer
+        {/* <WidgetContainer
           key="b"
           onTouchStart={(e) => handleTouchStart(e, "b")}
           onTouchMove={handleTouchMove}
@@ -379,7 +379,7 @@ const ReportDashboard = () => {
               Fill the Form
             </FormButton>
           </div>
-        </WidgetContainer>
+        </WidgetContainer> */}
 
         <WidgetContainer
           key="c"

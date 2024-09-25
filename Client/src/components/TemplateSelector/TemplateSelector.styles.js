@@ -86,6 +86,24 @@ export const NewTemplateButton = styled(Button)`
   }
 `;
 
+export const EditButton = styled(Button)`
+  background-color: #3498db;
+  color: white;
+
+  &:hover {
+    background-color: #2980b9;
+  }
+`;
+
+export const DuplicateButton = styled(Button)`
+  background-color: #3498db;
+  color: white;
+
+  &:hover {
+    background-color: #2980b9;
+  }
+`;
+
 export const CancelButton = styled(Button)`
   background-color: #e74c3c;
   color: white;
@@ -103,3 +121,4 @@ export const DeleteButton = styled(Button)`
     background-color: #c0392b;
   }
 `;
+

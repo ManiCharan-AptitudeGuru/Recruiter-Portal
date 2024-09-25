@@ -13,11 +13,28 @@ exports.updatePlanRouting = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
+
     user.plan = plan.name;
+    
+    // Set the number of job postings based on the plan
+    if (user.plan.toLowerCase() === "basic" || plan.name.toLowerCase() === "basic") {
+      console.log("hi");
+      user.numberOfJobPostings = 5;
+    } else if (user.plan.toLowerCase() === "standard") {
+      user.numberOfJobPostings = 15;
+      console.log("hello");
+    } else if (user.plan.toLowerCase() === "premium") {
+      console.log("Bye");
+      user.numberOfJobPostings = 9999999;  // Unlimited postings
+    }
+    
+
     await user.save();
+
     const allPlans = await PremiumPlan.find();
     const currentPlan = allPlans.find(p => p.name === user.plan);
     const availablePlans = allPlans.filter(p => p.name !== user.plan);
+
     res.json({ currentPlan, availablePlans, user });
   } catch (error) {
     console.error("Failed to update plan:", error);

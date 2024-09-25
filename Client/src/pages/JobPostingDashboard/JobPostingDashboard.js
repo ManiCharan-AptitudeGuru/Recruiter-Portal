@@ -27,6 +27,7 @@ import {
   getAllTemplates,
   createTemplate,
   deleteTemplate,
+  updateTemplate,
 } from "../../services/api";
 import { ThreeDots } from "react-loader-spinner";
 
@@ -60,6 +61,7 @@ const JobPostingDashboard = () => {
             getAuditTrailForJob(userId),
             getAllTemplates(),
           ]);
+        console.log(templatesResponse);
         setJobPostings(jobPostingsResponse);
         setAuditTrail(auditTrailResponse);
         setTemplates(templatesResponse);
@@ -224,6 +226,7 @@ const JobPostingDashboard = () => {
       setIsLoading(false);
     }
   };
+
   const handleSaveTemplate = async (templateData) => {
     setIsLoading(true);
     try {
@@ -232,7 +235,40 @@ const JobPostingDashboard = () => {
       alert("Template saved successfully!");
     } catch (error) {
       console.error("Error saving template:", error);
-      alert("Failed to save template. Please try again.");
+      alert(error.message || "Failed to save template. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleEditTemplate = async (updatedTemplate) => {
+    setIsLoading(true);
+    try {
+      const response = await updateTemplate(updatedTemplate);
+      setTemplates((prev) =>
+        prev.map((template) =>
+          template._id === updatedTemplate._id ? response.template : template
+        )
+      );
+      alert("Template updated successfully!");
+    } catch (error) {
+      console.error("Error updating template:", error);
+      alert(error.message || "Failed to update template. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleDuplicateTemplate = async (template) => {
+    setIsLoading(true);
+    try {
+      const { _id, ...templateWithoutId } = template;
+      const response = await createTemplate(templateWithoutId);
+      setTemplates((prev) => [...prev, response.template]);
+      alert("Template duplicated successfully!");
+    } catch (error) {
+      console.error("Error duplicating template:", error);
+      alert(error.message || "Failed to duplicate template. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -355,6 +391,8 @@ const JobPostingDashboard = () => {
                 onCancel={() => setIsCreateWithTemplate(false)}
                 savedTemplates={templates}
                 onDeleteTemplate={handleDeleteTemplate}
+                onEditTemplate={handleEditTemplate}
+                onDuplicateTemplate={handleDuplicateTemplate}
               />
             )}
 

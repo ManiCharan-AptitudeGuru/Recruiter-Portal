@@ -134,9 +134,10 @@ const navItems = [
   { path: '/job-postings', icon: Work, text: 'Job Postings' },
   { path: '/candidates', icon: People, text: 'Candidates' },
   { path: '/subscription', icon: Assignment, text: 'Subscription' },
-  { path: '/invoices', icon: FaFileInvoiceDollar, text: 'Invoices' },
+  { path: '/billing', icon: FaFileInvoiceDollar, text: 'Billing' },
   { path: '/reports', icon: SiSimpleanalytics, text: 'Reports', subItems: [
       { path: '/reports/dashboard', text: 'Dashboard' },
+      {path:'/reports/custom-report', text:"Custom Reports"},
       { path: '/reports/schedule', text: 'Schedule Reports' },
       { path: '/reports/exports', text: 'Exports' },
     ]},

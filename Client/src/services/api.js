@@ -2,7 +2,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 //https://recruiter-portal.onrender.com
 //http://localhost:5000
-const API_URL = "https://recruiter-portal.onrender.com";
+const API_URL = "http://localhost:5000";
 
 export const api = axios.create({
   baseURL: API_URL,
@@ -117,6 +117,7 @@ export const duplicateJobPosting = async (id) => {
     const response = await api.post(`/job-postings/${id}/duplicate`);
     return response.data;
   } catch (error) {
+    alert(error.response.data.message);
     return handleApiError({ error: "Failed to duplicate job Posting" });
   }
 };
@@ -161,10 +162,29 @@ export const getAllTemplates = async () => {
 
 export const createTemplate = async (template) => {
   try {
-    const response = await api.post("/templates", { template, userId });
+    const response = await api.post("/templates", {
+      template,
+      userId,
+    });
     return response.data;
   } catch (error) {
-    return handleApiError({ error: "Failed to create template" });
+    throw new Error(
+      error.response?.data?.message || "Failed to create template"
+    );
+  }
+};
+
+export const updateTemplate = async (template) => {
+  try {
+    const response = await api.put(`/templates/${template._id}`, {
+      template,
+      userId,
+    });
+    return response.data;
+  } catch (error) {
+    throw new Error(
+      error.response?.data?.message || "Failed to update template"
+    );
   }
 };
 
@@ -214,6 +234,39 @@ export const updateNotificationPreferences = async (preferences) => {
   } catch (error) {
     return handleApiError({
       error: "Failed to update notification preferences",
+    });
+  }
+};
+
+export const getCustomReport = async () => {
+  try {
+    const response = await api.get("/reports");
+    return response.data;
+  } catch (error) {
+    return handleApiError({
+      error: "Failed to fetch Custom Reports",
+    });
+  }
+};
+
+export const saveReport = async (reportConfig) => {
+  try {
+    const response = await api.post("/reports", reportConfig);
+    return response.data;
+  } catch (error) {
+    return handleApiError({
+      error: "Failed to save report",
+    });
+  }
+};
+
+export const deleteReport = async (reportId) => {
+  try {
+    const response = await api.delete(`/reports/${reportId}`);
+    return response.data;
+  } catch (error) {
+    return handleApiError({
+      error: "Failed to delete report",
     });
   }
 };

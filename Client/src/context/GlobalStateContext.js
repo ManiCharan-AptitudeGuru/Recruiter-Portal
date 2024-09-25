@@ -7,7 +7,6 @@ import React, {
   useCallback,
 } from "react";
 import { getPremiumPlans, updatePlan } from "../services/api.js";
-import Cookies from "js-cookie";
 
 const GlobalStateContext = createContext();
 
@@ -18,13 +17,10 @@ export const GlobalStateProvider = ({ children }) => {
 
   const fetchUserPlans = useCallback(async () => {
     try {
-      const userId = Cookies.get("id");
-      if (userId) {
-        const { currentPlan, availablePlans } = await getPremiumPlans();
-        setCurrentPlan(currentPlan);
-        setAvailablePlans(availablePlans);
-        setPlan(currentPlan.name);
-      }
+      const { currentPlan, availablePlans } = await getPremiumPlans();
+      setCurrentPlan(currentPlan);
+      setAvailablePlans(availablePlans);
+      setPlan(currentPlan.name);
     } catch (error) {
       console.error("Error fetching user plans:", error);
     }

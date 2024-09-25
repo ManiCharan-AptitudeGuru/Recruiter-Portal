@@ -5,6 +5,7 @@ import languageData from "../../data/language.json";
 import { useForm, Controller } from "react-hook-form";
 import skillsData from "../../data/skills.json";
 import departmentOptions from "../../data/departments.js";
+import SaveTemplateModal from "../SaveTemplateModal/SaveTemplateModal.js";
 import {
   PopupOverlay,
   PopupContent,
@@ -93,6 +94,7 @@ const JobPostingForm = (props) => {
   });
 
   const [customFields, setCustomFields] = useState([]);
+  const [isTemplateModalOpen, setIsTemplateModalOpen] = useState(false);
 
   useEffect(() => {
     if (editingJob) {
@@ -105,15 +107,19 @@ const JobPostingForm = (props) => {
     }
   }, [editingJob, setValue]);
 
-  const handleSaveTemplate = () => {
+  const handleSaveTemplateClick = () => {
     const currentValues = watch();
     if (!currentValues.jobTitle) {
       alert("Please fill all mandatory fields!");
       return;
     }
+    setIsTemplateModalOpen(true);
+  };
 
+  const handleSaveTemplate = (templateName) => {
+    const currentValues = watch();
     const templateToSave = {
-      name: currentValues.jobTitle.label || currentValues.jobTitle,
+      name: templateName,
       content: {
         ...currentValues,
         customFields,
@@ -121,7 +127,7 @@ const JobPostingForm = (props) => {
     };
 
     onSaveTemplate(templateToSave);
-
+    setIsTemplateModalOpen(false);
     setIsPopupOpen(false);
     setShowConfirmation(true);
   };
@@ -627,7 +633,7 @@ const JobPostingForm = (props) => {
               {editingJob ? "Update Job Posting" : "Create Job Posting"}
             </SubmitButton>
             {!template && (
-              <ActionButton type="button" onClick={handleSaveTemplate}>
+              <ActionButton type="button" onClick={handleSaveTemplateClick}>
                 Save Template
               </ActionButton>
             )}
@@ -640,6 +646,11 @@ const JobPostingForm = (props) => {
           </FormActions>
         </JobPostingFormContainer>
       </PopupContent>
+      <SaveTemplateModal
+        isOpen={isTemplateModalOpen}
+        onClose={() => setIsTemplateModalOpen(false)}
+        onSave={handleSaveTemplate}
+      />
     </PopupOverlay>
   );
 };
